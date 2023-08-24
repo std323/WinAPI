@@ -40,13 +40,13 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SendMessage(hList, LB_GETTEXT, i, (LPARAM)sz_buffer);
 			if (i < 0)
 			{
-				MessageBox(hwnd, ("Вы ничего не выбрали"), ("Info"), MB_OK | MB_ICONINFORMATION);
+				MessageBox(hwnd, "Вы ничего не выбрали", "Info", MB_OK | MB_ICONINFORMATION);
 			}
 			else
 			{
 				CHAR sz_message[SIZE] = {};
 				sprintf(sz_message, "Был выбран элемент номер %i, со значением \"%s\"", i, sz_buffer);
-				MessageBox(hwnd, sz_message, ("Info"), MB_OK | MB_ICONINFORMATION);
+				MessageBox(hwnd, sz_message, "Info", MB_OK | MB_ICONINFORMATION);
 			}
 		}
 		break;
