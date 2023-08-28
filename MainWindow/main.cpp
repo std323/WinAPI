@@ -21,7 +21,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wc.hIcon = (HICON)LoadImage(hInstance, "samsung_blue.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
 	wc.hIconSm = (HICON)LoadImage(hInstance, "samsung_black.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
 	//wc.hCursor = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR1));		//”казатель мыши при наведении на окно
-	wc.hCursor = (HCURSOR)LoadImage(hInstance, "Background.ani", IMAGE_CURSOR, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
+	wc.hCursor = (HCURSOR)LoadImage(hInstance, "Link.ani", IMAGE_CURSOR, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
 	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);		//÷вет фона окна
 
 	wc.hInstance = hInstance;		//Ёкземпл€р запущенной программы
