@@ -1,5 +1,8 @@
+Ôªø#define _CRT_SECURE_NO_WARNINGS
 #include<Windows.h>
 #include"resource.h"
+#include<cstdio>
+//#include"cstdio"
 
 CONST CHAR g_sz_WINDOW_CLASS[] = "My Window Class";
 
@@ -7,7 +10,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
-	//1) –Â„ËÒÚ‡ˆËˇ ÍÎ‡ÒÒ‡ ÓÍÌ‡:
+	//1) –†–µ–≥–∏—Å—Ç—Ä–∞—Ü–∏—è –∫–ª–∞—Å—Å–∞ –æ–∫–Ω–∞:
 	WNDCLASSEX wc;
 	ZeroMemory(&wc, sizeof(wc));
 
@@ -16,19 +19,19 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wc.cbWndExtra = 0;
 	wc.style = 0;
 
-	//wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_SAMSUNG_BLACK));	//»ÍÓÌÍ‡, ÓÚÓ·‡Ê‡ÂÏ‡ˇ ‚ Ô‡ÌÂÎË Á‡‰‡˜
-	//wc.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_SAMSUNG_BLUE));	//»ÍÓÌÍ‡, ÓÚÓ·‡Ê‡ÂÏ‡ˇ ‚ ÒÚÓÍÂ Á‡„ÓÎÓ‚Í‡
+	//wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_SAMSUNG_BLACK));	//–ò–∫–æ–Ω–∫–∞, –æ—Ç–æ–±—Ä–∞–∂–∞–µ–º–∞—è –≤ –ø–∞–Ω–µ–ª–∏ –∑–∞–¥–∞—á
+	//wc.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_SAMSUNG_BLUE));	//–ò–∫–æ–Ω–∫–∞, –æ—Ç–æ–±—Ä–∞–∂–∞–µ–º–∞—è –≤ —Å—Ç—Ä–æ–∫–µ –∑–∞–≥–æ–ª–æ–≤–∫–∞
 	wc.hIcon = (HICON)LoadImage(hInstance, "samsung_blue.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
 	wc.hIconSm = (HICON)LoadImage(hInstance, "samsung_black.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
-	//wc.hCursor = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR1));		//”Í‡Á‡ÚÂÎ¸ Ï˚¯Ë ÔË Ì‡‚Â‰ÂÌËË Ì‡ ÓÍÌÓ
+	//wc.hCursor = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_CURSOR1));		//–£–∫–∞–∑–∞—Ç–µ–ª—å –º—ã—à–∏ –ø—Ä–∏ –Ω–∞–≤–µ–¥–µ–Ω–∏–∏ –Ω–∞ –æ–∫–Ω–æ
 	wc.hCursor = (HCURSOR)LoadImage(hInstance, "Link.ani", IMAGE_CURSOR, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);
-	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);		//÷‚ÂÚ ÙÓÌ‡ ÓÍÌ‡
+	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);		//–¶–≤–µ—Ç —Ñ–æ–Ω–∞ –æ–∫–Ω–∞
 
-	wc.hInstance = hInstance;		//›ÍÁÂÏÔÎˇ Á‡ÔÛ˘ÂÌÌÓÈ ÔÓ„‡ÏÏ˚
-	wc.lpfnWndProc = WndProc;		//”Í‡Á‡ÚÂÎ¸ Ì‡ ÔÓˆÂ‰ÛÛ ÓÍÌ‡
+	wc.hInstance = hInstance;		//–≠–∫–∑–µ–º–ø–ª—è—Ä –∑–∞–ø—É—â–µ–Ω–Ω–æ–π –ø—Ä–æ–≥—Ä–∞–º–º—ã
+	wc.lpfnWndProc = WndProc;		//–£–∫–∞–∑–∞—Ç–µ–ª—å –Ω–∞ –ø—Ä–æ—Ü–µ–¥—É—Ä—É –æ–∫–Ω–∞
 	wc.lpszMenuName = NULL;
-	wc.lpszClassName = g_sz_WINDOW_CLASS;	//»Ïˇ ÍÎ‡ÒÒ‡ ÓÍÌ‡. ¿·ÒÓÎ˛ÚÌÓ Î˛·ÓÂ ÓÍÌÓ ÔÂÌ‡‰ÎÂÊËÚ Í‡ÍÓÏÛ-ÚÓ ÍÎ‡ÒÒÛ,
-	//Ú.Â., ‡·ÒÓÎ˛ÚÌÓ Î˛·ÓÂ ÓÍÌÓ Í‡ÍÓ„Ó-ÚÓ ÚËÔ‡ ( ÌÓÔÍ‡, “ÂÍÒÚÓ‚ÓÂ ÔÓÎÂ....)
+	wc.lpszClassName = g_sz_WINDOW_CLASS;	//–ò–º—è –∫–ª–∞—Å—Å–∞ –æ–∫–Ω–∞. –ê–±—Å–æ–ª—é—Ç–Ω–æ –ª—é–±–æ–µ –æ–∫–Ω–æ –ø—Ä–µ–Ω–∞–¥–ª–µ–∂–∏—Ç –∫–∞–∫–æ–º—É-—Ç–æ –∫–ª–∞—Å—Å—É,
+	//—Ç.–µ., –∞–±—Å–æ–ª—é—Ç–Ω–æ –ª—é–±–æ–µ –æ–∫–Ω–æ –∫–∞–∫–æ–≥–æ-—Ç–æ —Ç–∏–ø–∞ (–ö–Ω–æ–ø–∫–∞, –¢–µ–∫—Å—Ç–æ–≤–æ–µ –ø–æ–ª–µ....)
 
 	if (!RegisterClassEx(&wc))
 	{
@@ -51,31 +54,37 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 		return 0;
 	}
 
-	//2) —ÓÁ‰‡ÌËÂ ÓÍÌ‡:
+	//2) –°–æ–∑–¥–∞–Ω–∏–µ –æ–∫–Ω–∞:
+
+	int screen_width = GetSystemMetrics(SM_CXSCREEN);
+	int screen_height = GetSystemMetrics(SM_CYSCREEN);
+	int window_width = screen_width * .75;
+	int window_height = screen_height * .75;
+	int start_x = screen_width * .125;
+	int start_y = screen_height * .125;
 
 	HWND hwnd = CreateWindowEx
 	(
 		0,
-		g_sz_WINDOW_CLASS,		//»Ïˇ ÍÎ‡ÒÒ‡ ÓÍÌ‡
-		g_sz_WINDOW_CLASS,		//«‡„ÓÎÓ‚ÓÍ ÓÍÌ‡
-		WS_OVERLAPPEDWINDOW,	//√Î‡‚ÌÓÂ ÓÍÌÓ ÔÓ„‡ÏÏ˚, Â˘Â Ì‡Á˚‚‡ÂÚÒˇ TopLevelWindow
+		g_sz_WINDOW_CLASS,		//–ò–º—è –∫–ª–∞—Å—Å–∞ –æ–∫–Ω–∞
+		g_sz_WINDOW_CLASS,		//–ó–∞–≥–æ–ª–æ–≤–æ–∫ –æ–∫–Ω–∞
+		WS_OVERLAPPEDWINDOW,	//–ì–ª–∞–≤–Ω–æ–µ –æ–∫–Ω–æ –ø—Ä–æ–≥—Ä–∞–º–º—ã, –µ—â–µ –Ω–∞–∑—ã–≤–∞–µ—Ç—Å—è TopLevelWindow
 
-
-		CW_USEDEFAULT, CW_USEDEFAULT,
-		CW_USEDEFAULT, CW_USEDEFAULT,
+		start_x, start_y,
+		window_width, window_height,
 
 		NULL,	//Parent
-		NULL,	//ƒÎˇ „Î‡‚ÌÓ„Ó ÓÍÌ‡ - ˝ÚÓ ID_ ÏÂÌ˛.
-		//ƒÎˇ ˝ÎÂÏÂÌÚ‡ ÓÍÌ‡ - ˝ÚÓ ID_ ÂÒÛÒ‡ ˝ÚÓ„Ó ˝ÎÂÏÂÌÚ‡ (IDC_EDIT, IDC_BUTTON...)
-		hInstance,	//≈ÒÎË ÌÂÚ ÔˇÏÓ„Ó ‰ÓÒÚÛÔ‡ Í hInstance, Ì‡ÔËÏÂ ÔÓÚÓÏÛ, ˜ÚÓ Ï˚ ÌÂ ÔÓÎÛ˜ËÎË Â„Ó Í‡Í Ô‡‡ÏÂÚ,
-		//ÚÓ Â„Ó ‚ÒÂ„‰‡ ÏÓÊÌÓ ÔÓÎÛ˜ËÚ¸ ÔË ÔÓÏÓ˘Ë ÙÛÌÍˆËË GetModuleHandle(NULL);
+		NULL,	//–î–ª—è –≥–ª–∞–≤–Ω–æ–≥–æ –æ–∫–Ω–∞ - —ç—Ç–æ ID_ –º–µ–Ω—é.
+		//–î–ª—è —ç–ª–µ–º–µ–Ω—Ç–∞ –æ–∫–Ω–∞ - —ç—Ç–æ ID_ —Ä–µ—Å—É—Ä—Å–∞ —ç—Ç–æ–≥–æ —ç–ª–µ–º–µ–Ω—Ç–∞ (IDC_EDIT, IDC_BUTTON...)
+		hInstance,	//–ï—Å–ª–∏ –Ω–µ—Ç –ø—Ä—è–º–æ–≥–æ –¥–æ—Å—Ç—É–ø–∞ –∫ hInstance, –Ω–∞–ø—Ä–∏–º–µ—Ä –ø–æ—Ç–æ–º—É, —á—Ç–æ –º—ã –Ω–µ –ø–æ–ª—É—á–∏–ª–∏ –µ–≥–æ –∫–∞–∫ –ø–∞—Ä–∞–º–µ—Ç—Ä,
+		//—Ç–æ –µ–≥–æ –≤—Å–µ–≥–¥–∞ –º–æ–∂–Ω–æ –ø–æ–ª—É—á–∏—Ç—å –ø—Ä–∏ –ø–æ–º–æ—â–∏ —Ñ—É–Ω–∫—Ü–∏–∏ GetModuleHandle(NULL);
 		NULL
 	);
 	DWORD dwErrorMessageID = GetLastError();
 
 	if (hwnd == NULL)
 	{
-		//MessageBox(NULL, "ŒÍÌÓ ÌÂ ÓÚÍ˚‚‡ÂÚÒˇ, ÔÓ˝ÚÓÏÛ ÓÚÍÓÂÏ ıÓÚˇ ·˚ ÙÓÚÓ˜ÍÛ", "œÓÎÂÁÌ‡ˇ ËÌÙÓÏ‡ˆËˇ", MB_OK | MB_ICONINFORMATION);
+		//MessageBox(NULL, "–û–∫–Ω–æ –Ω–µ –æ—Ç–∫—Ä—ã–≤–∞–µ—Ç—Å—è, –ø–æ—ç—Ç–æ–º—É –æ—Ç–∫—Ä–æ–µ–º —Ö–æ—Ç—è –±—ã —Ñ–æ—Ä—Ç–æ—á–∫—É", "–ü–æ–ª–µ–∑–Ω–∞—è –∏–Ω—Ñ–æ—Ä–º–∞—Ü–∏—è", MB_OK | MB_ICONINFORMATION);
 		LPSTR lpszMessageBuffer = NULL;
 		DWORD dwSize =
 			FormatMessage
@@ -92,15 +101,15 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 		LocalFree(lpszMessageBuffer);
 		return 0;
 	}
-	ShowWindow(hwnd, nCmdShow);	//«‡‰‡ÂÏ ÂÊËÏ ÓÚÓ·‡ÊÂÌËˇ ÓÍÌ‡
-	UpdateWindow(hwnd);			//¬˚ÔÓÎÌˇÂÚ ÔÓËÒÓ‚ÍÛ ÓÍÌ‡
+	ShowWindow(hwnd, nCmdShow);	//–ó–∞–¥–∞–µ–º —Ä–µ–∂–∏–º –æ—Ç–æ–±—Ä–∞–∂–µ–Ω–∏—è –æ–∫–Ω–∞
+	UpdateWindow(hwnd);			//–í—ã–ø–æ–ª–Ω—è–µ—Ç –ø—Ä–æ—Ä–∏—Å–æ–≤–∫—É –æ–∫–Ω–∞
 
-	//3) «‡ÔÛÒÍ ˆËÍÎ‡ ÒÓÓ·˘ÂÌËÈ:
+	//3) –ó–∞–ø—É—Å–∫ —Ü–∏–∫–ª–∞ —Å–æ–æ–±—â–µ–Ω–∏–π:
 	MSG msg;
 	while (GetMessage(&msg, 0, 0, 0) > 0)
 	{
-		TranslateMessage(&msg);
-		DispatchMessageA(&msg);
+		TranslateMessage(&msg);//–ü—Ä–µ–æ–±—Ä–∞–∑—É–µ–º —Å–æ–æ–±—â–µ–Ω–∏—è –∫–ª–∞–≤–∏—à –≤ —Å–∏–º–≤–æ–ª—ã
+		DispatchMessageA(&msg);//–ü–µ—Ä–µ–¥–∞—ë–º —Å–æ–æ–±—â–µ–Ω–∏–µ —Å–æ–æ—Ç–≤–µ—Ç—Å—Ç–≤—É—é—â–µ–π —Ñ—É–Ω–∫—Ü–∏–∏ –æ–∫–Ω–∞
 	}
 	return 0;
 }
@@ -110,8 +119,69 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	switch (uMsg)
 	{
 	case WM_CREATE:
+	{
+	case WM_SIZE:
+	case WM_MOVE:
+	{
+		RECT rect;
+		GetWindowRect(hwnd, &rect);
+		int width = rect.right - rect.left;
+		int height = rect.bottom - rect.top;
+		CONST INT SIZE = 256;
+		CHAR sz_buffer[SIZE] = {};
+		sprintf(sz_buffer, "%s, Position: %ix%i Size: %ix%i", g_sz_WINDOW_CLASS, rect.left, rect.top, width, height);
+		SendMessage(hwnd, WM_SETTEXT, 0, (LPARAM)sz_buffer);
+		
+	}
+		CHAR sz_static_text[] = "–≠—Ç–æ—Ç Static control —Å–æ–∑–¥–∞–Ω –ø—Ä–∏ –ø–æ–º–æ—â–∏ —Ñ—É–Ω–∫—Ü–∏–∏ CreateWindowEx()";
+		CreateWindowEx
+		(
+			0, "Static", sz_static_text,
+			WS_CHILD | WS_VISIBLE,
+			100, 100,
+			strlen(sz_static_text)*7.2, 20,
+			hwnd,
+			(HMENU)IDC_STATIC,
+			GetModuleHandle(NULL),
+			NULL
+		);
+		CreateWindowEx
+		(
+			0, "Edit", "",
+			WS_CHILD | WS_VISIBLE | WS_BORDER,
+			100, 120,
+			300, 20,
+			hwnd,
+			(HMENU)IDC_EDIT,
+			GetModuleHandle(NULL),
+			NULL
+		);
+		CreateWindowEx
+		(
+			0, "Button", "OK",
+			WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+			300, 150,
+			100, 25,
+			hwnd,
+			(HMENU)IDC_BUTTON,
+			GetModuleHandle(NULL),
+			NULL
+		);
+		
+	}
 		break;
 	case WM_COMMAND:
+		switch (LOWORD(wParam))
+		{
+		case IDC_BUTTON:
+		{
+			CONST INT SIZE = 256;
+			CHAR sz_buffer[SIZE]{};
+			SendMessage(GetDlgItem(hwnd, IDC_EDIT), WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
+			SendMessage(GetDlgItem(hwnd, IDC_STATIC), WM_SETTEXT, 0, (LPARAM)sz_buffer);
+
+		}
+		}
 		break;
 	case WM_DESTROY: PostQuitMessage(0); break;
 	case WM_CLOSE:	 DestroyWindow(hwnd); break;

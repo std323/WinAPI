@@ -49,7 +49,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			else
 			{
 				CHAR sz_message[SIZE] = {};
-				sprintf(sz_message, "Был выбран элемент номер %i, со значением \"%s\"", i, sz_buffer);
+				sprintf(sz_message, "Был выбран элемент номер %i, со значением \"%s\"", i /* + 1*/, sz_buffer);
 				MessageBox(hwnd, sz_message, "Info", MB_OK | MB_ICONINFORMATION);
 			}
 		}
