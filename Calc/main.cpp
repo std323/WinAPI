@@ -1,4 +1,4 @@
-#include<Windows.h>
+п»ї#include<Windows.h>
 #include"resource.h"
 
 CONST CHAR g_sz_MY_WINDOW_CLASS[] = "My Calculator";
@@ -30,7 +30,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
-	//1) Регистрация класса окна:
+	//1) Р РµРіРёСЃС‚СЂР°С†РёСЏ РєР»Р°СЃСЃР° РѕРєРЅР°:
 
 	WNDCLASSEX wc;
 	ZeroMemory(&wc, sizeof(wc));
@@ -57,7 +57,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 
 
 
-	//2) Создание окна:
+	//2) РЎРѕР·РґР°РЅРёРµ РѕРєРЅР°:
 	HWND hwnd = CreateWindowEx
 	(
 		0,
@@ -80,12 +80,12 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	ShowWindow(hwnd, nCmdShow);
 	UpdateWindow(hwnd);
 
-	//3) Запуск цикла сообщений:
+	//3) Р—Р°РїСѓСЃРє С†РёРєР»Р° СЃРѕРѕР±С‰РµРЅРёР№:
 	MSG msg;
 	while (GetMessage(&msg, 0, 0, 0) > 0)
 	{
-		TranslateMessage(&msg);//Преобразуем сообщения клавиш в символы
-		DispatchMessageA(&msg);//Передаём сообщение соответствующей функции окна
+		TranslateMessage(&msg);//РџСЂРµРѕР±СЂР°Р·СѓРµРј СЃРѕРѕР±С‰РµРЅРёСЏ РєР»Р°РІРёС€ РІ СЃРёРјРІРѕР»С‹
+		DispatchMessageA(&msg);//РџРµСЂРµРґР°С‘Рј СЃРѕРѕР±С‰РµРЅРёРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµР№ С„СѓРЅРєС†РёРё РѕРєРЅР°
 	}
 	return msg.wParam;
 }
