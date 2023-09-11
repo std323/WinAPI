@@ -25,7 +25,63 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resource.rc">
+    <Image Include="BUTTON_BMP\PLUS.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\MINUS.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\ASTER.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\SLASH.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\BSP.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\CLEAR.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\EQUAL.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\0.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\POINT.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\4.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\5.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\6.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\7.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\8.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="BUTTON_BMP\9.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Buttons.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

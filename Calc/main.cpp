@@ -2,9 +2,12 @@
 #include<Windows.h>
 #include"resource.h"
 #include<cstdio>
+#include"buttons.h"
+
 
 
 CONST CHAR g_sz_MY_WINDOW_CLASS[] = "My Calculator";
+CONST CHAR g_sz_DEFAULT_SKIN[] = "square_blue";
 //g - Global
 //sz - String Zero
 CONST INT g_i_START_X = 10;
@@ -27,9 +30,12 @@ CONST INT g_i_WINDOW_HEIGHT = g_i_DISPLAY_HEIGHT + g_i_START_Y * 3 + g_i_BTN_SIZ
 
 CONST CHAR g_OPERATIONS[] = "+-*/";
 
-
+CONST CHAR g_sz_DISPLAY_FONT[] = "Tahoma";
+CONST INT g_i_DISPLAY_FONT_HEIGHT = g_i_DISPLAY_HEIGHT - 2;
+CONST INT g_i_DISPLAY_FONT_WIDTH = g_i_DISPLAY_FONT_HEIGHT / 2.5;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+VOID SetSkin(HWND hwnd, CONST CHAR sz_skin[]);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
@@ -43,7 +49,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wc.style = 0;
 
 	wc.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
-	wc.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
+	wc.hIconSm = LoadIcon(hInstance, IDI_APPLICATION);
 	wc.hCursor = LoadCursor(hInstance, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
 
@@ -118,6 +124,38 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		);
 		//SendMessage(hDisplay, WM_SETTEXT, 0, (LPARAM)"Dsplay");
 
+		/*LOGFONT lFont;
+		ZeroMemory(&lFont, sizeof(lFont));
+		lFont.lfHeight = 32;
+		lFont.lfWidth = 12;
+		lFont.lfEscapement = 0;
+		lFont.lfOrientation = 0;
+		lFont.lfWeight = FW_DEMIBOLD;
+		lFont.lfItalic = FALSE;
+		lFont.lfUnderline = FALSE;
+		lFont.lfStrikeOut = FALSE;
+		lFont.lfCharSet = DEFAULT_CHARSET;
+		lFont.lfOutPrecision = OUT_TT_PRECIS;
+		lFont.lfClipPrecision = CLIP_DEFAULT_PRECIS;
+		lFont.lfQuality = ANTIALIASED_QUALITY;
+		lFont.lfPitchAndFamily = DEFAULT_PITCH | FF_DONTCARE;
+		strcpy(lFont.lfFaceName, "Arial");
+
+		HFONT hFont = CreateFontIndirect(&lFont);*/
+		HFONT hFont = CreateFont
+		(
+			g_i_DISPLAY_FONT_HEIGHT, g_i_DISPLAY_FONT_WIDTH,
+			GM_ADVANCED, 0, FW_DEMIBOLD,
+			FALSE, FALSE, FALSE,
+			DEFAULT_CHARSET,
+			OUT_CHARACTER_PRECIS,
+			CLIP_CHARACTER_PRECIS,
+			ANTIALIASED_QUALITY,
+			DEFAULT_PITCH | FF_DONTCARE,
+			g_sz_DISPLAY_FONT
+		);
+		SendMessage(hDisplay, WM_SETFONT, (WPARAM)hFont, TRUE);
+
 		INT i_digit = 1;
 		CHAR sz_digit[2] = {};
 		/*for (int i = 3; i > 0; i--)
@@ -150,7 +188,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				CreateWindowEx
 				(
 					NULL, "Button", sz_digit,
-					WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON,
+					WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON | BS_BITMAP,
 					g_i_BTN_START_X + g_i_BTN_SIZE_WITHN_INTERVAL * j,
 					g_i_BTN_START_Y + g_i_BTN_SIZE_WITHN_INTERVAL * i,
 					g_i_BTN_SIZE, g_i_BTN_SIZE,
@@ -164,23 +202,28 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				i_digit++;
 			}
 		}
+		
 		//////////////////////////////////////////////////
 		CreateWindowEx
 		(
 			NULL, "Button", "0",
-			WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON,
+			WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON | BS_BITMAP,
 			g_i_BTN_START_X, g_i_BTN_START_Y + g_i_BTN_SIZE_WITHN_INTERVAL * 3,
 			g_i_BTN_SIZE_DOUBLE, g_i_BTN_SIZE,
 			hwnd,
 			(HMENU)IDC_BUTTON_0,
 			GetModuleHandle(NULL),
 			NULL
-
 		);
+		SetSkin(hwnd, g_sz_DEFAULT_SKIN);
+		/*HWND hBtnNull = GetDlgItem(hwnd, IDC_BUTTON_0);
+		HBITMAP hBitMapNull = LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(IDB_BITMAP_0));
+		SendMessage(hBtnNull, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hBitMapNull);*/
+
 		CreateWindowEx
 		(
 			NULL, "Button", ".",
-			WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON,
+			WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON | BS_BITMAP,
 			g_i_BTN_START_X + g_i_BTN_SIZE_WITHN_INTERVAL * 2, g_i_BTN_START_Y + g_i_BTN_SIZE_WITHN_INTERVAL * 3,
 			g_i_BTN_SIZE, g_i_BTN_SIZE,
 			hwnd,
@@ -188,6 +231,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
+		/*HWND hBtnPoint = GetDlgItem(hwnd, IDC_BUTTON_POINT);
+		HBITMAP hBitMapPoint = LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(IDB_BITMAP_POINT));
+		SendMessage(hBtnPoint, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hBitMapPoint);*/
 
 		//////////////////////////////////////////////////
 
@@ -199,7 +245,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			CreateWindowEx
 			(
 				NULL, "Button", sz_operation,
-				WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+				WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON | BS_BITMAP,
 				g_i_BTN_START_X + g_i_BTN_SIZE_WITHN_INTERVAL * 3, g_i_BTN_START_Y + g_i_BTN_SIZE_WITHN_INTERVAL * (3 - i),
 				g_i_BTN_SIZE, g_i_BTN_SIZE,
 				hwnd,
@@ -208,10 +254,27 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				NULL
 			);
 		}
+
+		/*HWND hBtnPlus = GetDlgItem(hwnd, IDC_BUTTON_PLUS);
+		HBITMAP hBitMapPlus = LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(IDB_BITMAP_PLUS));
+		SendMessage(hBtnPlus, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hBitMapPlus);
+
+		HWND hBtnMinus = GetDlgItem(hwnd, IDC_BUTTON_MINUS);
+		HBITMAP hBitMapMinus = LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(IDB_BITMAP_MINUS));
+		SendMessage(hBtnMinus, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hBitMapMinus);
+
+		HWND hBtnAster = GetDlgItem(hwnd, IDC_BUTTON_ASTER);
+		HBITMAP hBitMapAster = LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(IDB_BITMAP_ASTER));
+		SendMessage(hBtnAster, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hBitMapAster);
+
+		HWND hBtnSlash = GetDlgItem(hwnd, IDC_BUTTON_SLASH);
+		HBITMAP hBitMapSlash = LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(IDB_BITMAP_SLASH));
+		SendMessage(hBtnSlash, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hBitMapSlash);*/
+
 		CreateWindowEx
 		(
 			NULL, "Button", "<-",
-			WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+			WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON | BS_BITMAP,
 			g_i_BTN_START_X + g_i_BTN_SIZE_WITHN_INTERVAL * 4, g_i_BTN_START_Y,
 			g_i_BTN_SIZE, g_i_BTN_SIZE,
 			hwnd,
@@ -219,10 +282,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
+		/*HWND hBtnBsp = GetDlgItem(hwnd, IDC_BUTTON_BSP);
+		HBITMAP hBitMapBsp = LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(IDB_BITMAP_BSP));
+		SendMessage(hBtnBsp, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hBitMapBsp);*/
+
 		CreateWindowEx
 		(
 			NULL, "Button", "C",
-			WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+			WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON | BS_BITMAP,
 			g_i_BTN_START_X + g_i_BTN_SIZE_WITHN_INTERVAL * 4, g_i_BTN_START_Y + g_i_BTN_SIZE_WITHN_INTERVAL,
 			g_i_BTN_SIZE, g_i_BTN_SIZE,
 			hwnd,
@@ -230,10 +297,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
+		/*HWND hBtnClear = GetDlgItem(hwnd, IDC_BUTTON_CLEAR);
+		HBITMAP hBitMapClear = LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(IDB_BITMAP_CLEAR));
+		SendMessage(hBtnClear, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hBitMapClear);*/
+		
 		CreateWindowEx
 		(
 			NULL, "Button", "=",
-			WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+			WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON | BS_BITMAP,
 			g_i_BTN_START_X + g_i_BTN_SIZE_WITHN_INTERVAL * 4, g_i_BTN_START_Y + g_i_BTN_SIZE_WITHN_INTERVAL * 2,
 			g_i_BTN_SIZE, g_i_BTN_SIZE_DOUBLE,
 			hwnd,
@@ -241,9 +312,33 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
+		/*HWND hBtnEqual = GetDlgItem(hwnd, IDC_BUTTON_EQUAL);
+		HBITMAP hBitMapEqual = LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(IDB_BITMAP_EQUAL));
+		SendMessage(hBtnEqual, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hBitMapEqual);*/
+		
+	}
+
+	break;
+	case WM_CTLCOLORSTATIC:
+	{
+		if ((HWND)lParam == GetDlgItem(hwnd, IDC_STATIC))
+		{
+			HDC hdc = (HDC)wParam;
+			SetBkMode(hdc, OPAQUE);
+			SetBkColor(hdc, RGB(240, 240, 240));
+			SetTextColor(hdc, RGB(255, 0, 0));
+			return (INT)GetStockObject(NULL_BRUSH);
+		}
 	}
 	break;
-	
+	case WM_CTLCOLOREDIT:
+	{
+		HDC hdc = (HDC)wParam;
+		SetBkMode(hdc, OPAQUE);
+		SetBkColor(hdc, RGB(0, 0, 100)); HBRUSH hBrush = CreateSolidBrush(RGB(0, 0, 255));
+		SetTextColor(hdc, RGB(255, 0, 0));
+		return (LRESULT)hBrush;
+	}
 
 	case WM_COMMAND:
 
@@ -262,7 +357,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			}
 				
-
 			CHAR sz_symbol[2] = {};
 			sz_symbol[0] = CHAR(LOWORD(wParam) - IDC_BUTTON_0 + '0');
 
@@ -292,7 +386,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 		if (LOWORD(wParam) == IDC_BUTTON_BSP)
 		{
-			if (strcmp(sz_buffer, "0") == 0)break;
+			if (strcmp(sz_buffer, "0") == 0 || strlen(sz_buffer)==0) break;
 			sz_buffer[strlen(sz_buffer) - 1] = 0;
 			SendMessage(hStatic, WM_SETTEXT, 0, (LPARAM)sz_buffer);
 		}
@@ -348,9 +442,91 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 		
 	break;
+	case WM_KEYDOWN:
+	{
+		if (GetKeyState(VK_SHIFT) < 0)
+		{
+			if(wParam == 0x38)SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_ASTER, 0);
+		}
+		else if (LOWORD(wParam) >= 0x30 && LOWORD(wParam) <= 0x39)//DIGITS:0123....9
+		{
+			SendMessage(hwnd, WM_COMMAND, wParam - 0x30 + 1000, 0);
+		}
+		else if(LOWORD(wParam) >= 0x60 && LOWORD(wParam) <= 69)
+			SendMessage(hwnd, WM_COMMAND, wParam - 0x60 + 1000, 0);
+		
+		switch (LOWORD(wParam))
+		{
+		case VK_OEM_PERIOD: SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_POINT, 0); break;
+		case VK_OEM_PLUS: SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_PLUS, 0); break;
+		case VK_OEM_MINUS: SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_MINUS, 0); break;
+		case VK_MULTIPLY: SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_ASTER, 0); break;
+		case VK_OEM_2: 
+		case VK_DIVIDE: SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_SLASH, 0); break;
+		case VK_BACK: SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_BSP, 0); break;
+		case VK_RETURN: SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_EQUAL, 0); break;
+		case VK_ESCAPE: SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_CLEAR, 0); break;
+		
+		}
+	}
+	break;
+	case WM_CONTEXTMENU:
+	{
+		HMENU hMenu = CreatePopupMenu();
+		InsertMenu(hMenu, 0, MF_BYPOSITION | MF_STRING, IDC_EXIT, "Exit");
+		InsertMenu(hMenu, 0, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);
+		InsertMenu(hMenu, 0, MF_BYPOSITION | MF_STRING, IDC_SQUARE, "Square buttons");
+		InsertMenu(hMenu, 0, MF_BYPOSITION | MF_STRING, IDC_ROUND, "Round buttons");
+		
+		switch(TrackPopupMenuEx(hMenu, TPM_BOTTOMALIGN | TPM_LEFTALIGN | TPM_RETURNCMD, LOWORD(lParam), HIWORD(lParam), hwnd, NULL))
+		{
+		case IDC_ROUND: SetSkin(hwnd, "round_blue"); break;
+		case IDC_SQUARE: SetSkin(hwnd, "square_blue"); break;
+		case IDC_EXIT: SendMessage(hwnd, IDC_EXIT, 0, 0);
+		}
+	}
+	break;
 	case WM_DESTROY: PostQuitMessage(0); break;
+	case IDC_EXIT:
 	case WM_CLOSE:	 DestroyWindow(hwnd); break;
 	default:		 return DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}
 	return NULL;
+}
+VOID SetSkin(HWND hwnd, CONST CHAR sz_skin[])
+{
+	CONST INT SIZE = 10;
+	HWND hButton[SIZE] = {};
+	//HBITMAP hBitmap[SIZE] = {};
+	for (int i = 0; i < SIZE; i++)
+	{
+		hButton[i] = GetDlgItem(hwnd, i + IDC_BUTTON_0);
+		//hBitmap[i] = LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(i + IDB_BITMAP_0));
+		//HBITMAP hBitmap = LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(i + IDB_BITMAP_0));
+		CHAR sz_filename[FILENAME_MAX] = {};
+		sprintf(sz_filename, "ButtonsBMP\\%s\\button_%i.bmp", sz_skin, i);
+		HBITMAP hBitmap = (HBITMAP)LoadImage
+		(
+			GetModuleHandle(NULL),
+			sz_filename,
+			IMAGE_BITMAP,
+			i >0 ?g_i_BTN_SIZE: g_i_BTN_SIZE_DOUBLE, g_i_BTN_SIZE,
+			LR_LOADFROMFILE
+		);
+		//DWORD dwErrorMessageID = GetLastError();
+		//LPSTR lpMessageBuffer = NULL;
+		/*DWORD dwSize = FormatMessage
+		(
+			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL,
+			dwErrorMessageID,
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_RUSSIAN_RUSSIA),
+			(LPSTR)&lpMessageBuffer,
+			0,
+			NULL
+		);
+		MessageBox(hwnd, lpMessageBuffer, "Error", MB_OK | MB_ICONERROR);*/
+		SendMessage(hButton[i], BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hBitmap);
+	}
+
 }

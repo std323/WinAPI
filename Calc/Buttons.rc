@@ -1,0 +1,114 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "buttons.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian (Russia) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+
+IDB_BUTTON_0    BITMAP        "ButtonsBMP\\square_blue\\button_0.bmp"
+IDB_BUTTON_1    BITMAP        "ButtonsBMP\\square_blue\\button_1.bmp"
+IDB_BUTTON_2    BITMAP        "ButtonsBMP\\square_blue\\button_2.bmp"
+IDB_BUTTON_3    BITMAP        "ButtonsBMP\\square_blue\\button_3.bmp"
+IDB_BUTTON_4    BITMAP        "ButtonsBMP\\square_blue\\button_4.bmp"
+IDB_BUTTON_5    BITMAP        "ButtonsBMP\\square_blue\\button_5.bmp"
+IDB_BUTTON_6    BITMAP        "ButtonsBMP\\square_blue\\button_6.bmp"
+IDB_BUTTON_7    BITMAP        "ButtonsBMP\\square_blue\\button_7.bmp"
+IDB_BUTTON_8    BITMAP        "ButtonsBMP\\square_blue\\button_8.bmp"
+IDB_BUTTON_9    BITMAP        "ButtonsBMP\\square_blue\\button_9.bmp"
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource1.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP_PLUS         BITMAP                  "BUTTON_BMP\\PLUS.bmp"
+
+IDB_BITMAP_MINUS        BITMAP                  "BUTTON_BMP\\MINUS.bmp"
+
+IDB_BITMAP_ASTER        BITMAP                  "BUTTON_BMP\\ASTER.bmp"
+
+IDB_BITMAP_SLASH        BITMAP                  "BUTTON_BMP\\SLASH.bmp"
+
+IDB_BITMAP_BSP          BITMAP                  "BUTTON_BMP\\BSP.bmp"
+
+IDB_BITMAP_CLEAR        BITMAP                  "BUTTON_BMP\\CLEAR.bmp"
+
+IDB_BITMAP_EQUAL        BITMAP                  "BUTTON_BMP\\EQUAL.bmp"
+
+IDB_BITMAP_0            BITMAP                  "BUTTON_BMP\\0.bmp"
+
+IDB_BITMAP_POINT        BITMAP                  "BUTTON_BMP\\POINT.bmp"
+
+IDB_BITMAP_1            BITMAP                  "BUTTON_BMP\\1.bmp"
+
+IDB_BITMAP_2            BITMAP                  "BUTTON_BMP\\2.bmp"
+
+IDB_BITMAP_3            BITMAP                  "BUTTON_BMP\\3.bmp"
+
+IDB_BITMAP_4            BITMAP                  "BUTTON_BMP\\4.bmp"
+
+IDB_BITMAP_5            BITMAP                  "BUTTON_BMP\\5.bmp"
+
+IDB_BITMAP_6            BITMAP                  "BUTTON_BMP\\6.bmp"
+
+IDB_BITMAP_7            BITMAP                  "BUTTON_BMP\\7.bmp"
+
+IDB_BITMAP_8            BITMAP                  "BUTTON_BMP\\8.bmp"
+
+IDB_BITMAP_9            BITMAP                  "BUTTON_BMP\\9.bmp"
+
+#endif    // Russian (Russia) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
