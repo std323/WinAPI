@@ -43,8 +43,9 @@
 #define IDC_BUTTON_BSP                  1017
 
 
-#define IDC_SQUARE                       200
-#define IDC_ROUND                        201
+#define IDC_SQUARE                 200
+#define IDC_ROUND                   201
+#define IDC_ROUND_GREEN                  202
 
 #define IDC_EXIT                         300
 

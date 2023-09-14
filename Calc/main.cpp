@@ -34,10 +34,17 @@ CONST CHAR g_sz_DISPLAY_FONT[] = "Tahoma";
 CONST INT g_i_DISPLAY_FONT_HEIGHT = g_i_DISPLAY_HEIGHT - 2;
 CONST INT g_i_DISPLAY_FONT_WIDTH = g_i_DISPLAY_FONT_HEIGHT / 2.5;
 
+CONST COLORREF g_cr_SQUARE_BLUE = RGB(1, 6, 160);
+CONST COLORREF g_cr_ROUND_BLUE = RGB(41, 143, 209);
+
+CONST HBRUSH hBrushSquareBlue = CreateSolidBrush(g_cr_SQUARE_BLUE);
+CONST HBRUSH hBrushRoundBlue = CreateSolidBrush(g_cr_ROUND_BLUE);
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 VOID SetSkin(HWND hwnd, CONST CHAR sz_skin[]);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
+
 {
 	//1) Регистрация класса окна:
 
@@ -51,8 +58,9 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wc.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
 	wc.hIconSm = LoadIcon(hInstance, IDI_APPLICATION);
 	wc.hCursor = LoadCursor(hInstance, IDC_ARROW);
+	//wc.hbrBackground = CreateSolidBrush(RGB(1, 96, 160));
 	wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
-
+	
 	wc.hInstance = hInstance;
 	wc.lpszMenuName = NULL;
 	wc.lpfnWndProc = WndProc;
@@ -105,6 +113,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	static INT operation = 0;
 	static BOOL input = FALSE;
 	static BOOL operation_input = false;
+
+	static COLORREF crBackground = RGB(0, 0, 240);
+	static HBRUSH hBrush = CreateSolidBrush(crBackground);
+
+	static CHAR sz_skin[FILENAME_MAX] = {};
 	switch (uMsg)
 	{
 	case WM_CREATE:
@@ -215,6 +228,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
+		strcpy(sz_skin, g_sz_DEFAULT_SKIN);
 		SetSkin(hwnd, g_sz_DEFAULT_SKIN);
 		/*HWND hBtnNull = GetDlgItem(hwnd, IDC_BUTTON_0);
 		HBITMAP hBitMapNull = LoadBitmap(GetModuleHandle(NULL), MAKEINTRESOURCE(IDB_BITMAP_0));
@@ -319,26 +333,39 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 
 	break;
+	case WM_PAINT:
+	{
+		PAINTSTRUCT ps;
+		HDC hdc = BeginPaint(hwnd, &ps);
+		HBRUSH hBackground = CreateSolidBrush(crBackground);
+		FillRect(hdc, &ps.rcPaint, hBrush);
+		EndPaint(hwnd, &ps);
+		DeleteObject(hBackground);
+	}
+	 break;
 	case WM_CTLCOLORSTATIC:
 	{
 		if ((HWND)lParam == GetDlgItem(hwnd, IDC_STATIC))
 		{
 			HDC hdc = (HDC)wParam;
-			SetBkMode(hdc, OPAQUE);
-			SetBkColor(hdc, RGB(240, 240, 240));
+			SetDCBrushColor(hdc, RGB(0, 0, 100));
+			//SetBkMode(hdc, OPAQUE);
+			SetBkColor(hdc, RGB(0, 0, 100));
 			SetTextColor(hdc, RGB(255, 0, 0));
-			return (INT)GetStockObject(NULL_BRUSH);
+			//SetTextColor(hdc, RGB(0, 190, 0));
+			return (int)GetStockObject(DC_BRUSH);
 		}
 	}
 	break;
-	case WM_CTLCOLOREDIT:
+	/*case WM_CTLCOLOREDIT:
 	{
 		HDC hdc = (HDC)wParam;
 		SetBkMode(hdc, OPAQUE);
 		SetBkColor(hdc, RGB(0, 0, 100)); HBRUSH hBrush = CreateSolidBrush(RGB(0, 0, 255));
 		SetTextColor(hdc, RGB(255, 0, 0));
+		//SetTextColor(hdc, RGB(0, 190, 0));
 		return (LRESULT)hBrush;
-	}
+	}*/
 
 	case WM_COMMAND:
 
@@ -439,6 +466,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			sprintf(sz_buffer, "%F", a);
 			SendMessage(hStatic, WM_SETTEXT, 0, (LPARAM)sz_buffer);
 		}
+		SetFocus(hwnd);
 	}
 		
 	break;
@@ -475,15 +503,35 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		HMENU hMenu = CreatePopupMenu();
 		InsertMenu(hMenu, 0, MF_BYPOSITION | MF_STRING, IDC_EXIT, "Exit");
 		InsertMenu(hMenu, 0, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);
-		InsertMenu(hMenu, 0, MF_BYPOSITION | MF_STRING, IDC_SQUARE, "Square buttons");
-		InsertMenu(hMenu, 0, MF_BYPOSITION | MF_STRING, IDC_ROUND, "Round buttons");
+		InsertMenu(hMenu, 0, MF_BYPOSITION | MF_STRING, IDC_SQUARE, "Square buttons blue");
+		InsertMenu(hMenu, 0, MF_BYPOSITION | MF_STRING, IDC_ROUND, "Round buttons blue");
+		InsertMenu(hMenu, 0, MF_BYPOSITION | MF_STRING, IDC_ROUND, "Round buttons green");
 		
 		switch(TrackPopupMenuEx(hMenu, TPM_BOTTOMALIGN | TPM_LEFTALIGN | TPM_RETURNCMD, LOWORD(lParam), HIWORD(lParam), hwnd, NULL))
 		{
-		case IDC_ROUND: SetSkin(hwnd, "round_blue"); break;
-		case IDC_SQUARE: SetSkin(hwnd, "square_blue"); break;
+		//case IDC_ROUND_BLUE: SetSkin(hwnd, "round_blue"); break;
+		//case IDC_SQUARE_BLUE: SetSkin(hwnd, "square_blue"); break;
+		//case IDC_ROUND_GREEN: SetSkin(hwnd, "round_green"); break;
+		case IDC_ROUND: strcpy(sz_skin, "round_blue"); crBackground = g_cr_ROUND_BLUE; break;
+		case IDC_SQUARE: strcpy(sz_skin, "square_blue"); crBackground = g_cr_SQUARE_BLUE; break;
 		case IDC_EXIT: SendMessage(hwnd, IDC_EXIT, 0, 0);
 		}
+		SetSkin(hwnd, sz_skin);
+		BOOL update = UpdateWindow(hwnd);
+		/*DWORD dwErrorMessageID = GetLastError();
+		LPSTR lpMessageBuffer = NULL;
+		DWORD sdwSize = FormatMessage
+		(
+			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL,
+			dwErrorMessageID,
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_RUSSIAN_RUSSIA),
+			(LPSTR)&lpMessageBuffer,
+			0,
+			NULL
+		);
+		MessageBox(hwnd, lpMessageBuffer, "Error", MB_OK | MB_ICONERROR);*/
+
 	}
 	break;
 	case WM_DESTROY: PostQuitMessage(0); break;
@@ -510,7 +558,7 @@ VOID SetSkin(HWND hwnd, CONST CHAR sz_skin[])
 			GetModuleHandle(NULL),
 			sz_filename,
 			IMAGE_BITMAP,
-			i >0 ?g_i_BTN_SIZE: g_i_BTN_SIZE_DOUBLE, g_i_BTN_SIZE,
+			i > 0 ?g_i_BTN_SIZE: g_i_BTN_SIZE_DOUBLE, g_i_BTN_SIZE,
 			LR_LOADFROMFILE
 		);
 		//DWORD dwErrorMessageID = GetLastError();
@@ -528,5 +576,12 @@ VOID SetSkin(HWND hwnd, CONST CHAR sz_skin[])
 		MessageBox(hwnd, lpMessageBuffer, "Error", MB_OK | MB_ICONERROR);*/
 		SendMessage(hButton[i], BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hBitmap);
 	}
-
+	//if (strcmp(sz_skin, "square_blue") == 0)SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, (LONG_PTR)hBrushSquareBlue);
+	//if (strcmp(sz_skin, "round_blue") == 0)	SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, (LONG_PTR)hBrushRoundBlue);
+	
+	HDC hdc = GetDC(hwnd);
+	if (strcmp(sz_skin, "square_blue") == 0)SetDCBrushColor(hdc, RGB(1, 96, 160));
+	if (strcmp(sz_skin, "round_blue") == 0)SetDCBrushColor(hdc, RGB(41, 143, 209));
+	ReleaseDC(hwnd, hdc);
+	UpdateWindow(hwnd);
 }
