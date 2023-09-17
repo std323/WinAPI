@@ -58,9 +58,15 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wc.hIcon = LoadIcon(hInstance, IDI_APPLICATION);
 	wc.hIconSm = LoadIcon(hInstance, IDI_APPLICATION);
 	wc.hCursor = LoadCursor(hInstance, IDC_ARROW);
-	//wc.hbrBackground = CreateSolidBrush(RGB(1, 96, 160));
 	wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
+	//wc.hbrBackground = CreatePatternBrush((HBITMAP)LoadImage(GetModuleHandle(0), MAKEINTRESOURCE(IDC_BACKGROUND_BMP), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION));
 	
+	/*wc.hbrBackground = CreatePatternBrush((HBITMAP)LoadImage(0, "Background.bmp",
+		IMAGE_BITMAP, 0, 0,
+		LR_CREATEDIBSECTION | LR_LOADFROMFILE));*/
+	
+	//wc.hbrBackground = CreatePatternBrush(LoadBitmap(hInstance, MAKEINTRESOURCE(IDC_BACKGROUND_BMP)));
+
 	wc.hInstance = hInstance;
 	wc.lpszMenuName = NULL;
 	wc.lpfnWndProc = WndProc;
@@ -333,6 +339,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 
 	break;
+	
 	case WM_PAINT:
 	{
 		PAINTSTRUCT ps;
@@ -343,6 +350,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		DeleteObject(hBackground);
 	}
 	 break;
+	 
 	case WM_CTLCOLORSTATIC:
 	{
 		if ((HWND)lParam == GetDlgItem(hwnd, IDC_STATIC))
@@ -579,9 +587,9 @@ VOID SetSkin(HWND hwnd, CONST CHAR sz_skin[])
 	//if (strcmp(sz_skin, "square_blue") == 0)SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, (LONG_PTR)hBrushSquareBlue);
 	//if (strcmp(sz_skin, "round_blue") == 0)	SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, (LONG_PTR)hBrushRoundBlue);
 	
-	HDC hdc = GetDC(hwnd);
+	/*HDC hdc = GetDC(hwnd);
 	if (strcmp(sz_skin, "square_blue") == 0)SetDCBrushColor(hdc, RGB(1, 96, 160));
 	if (strcmp(sz_skin, "round_blue") == 0)SetDCBrushColor(hdc, RGB(41, 143, 209));
 	ReleaseDC(hwnd, hdc);
-	UpdateWindow(hwnd);
+	UpdateWindow(hwnd);*/
 }
