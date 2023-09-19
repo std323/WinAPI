@@ -1,4 +1,5 @@
-﻿#include<Windows.h>
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include<Windows.h>
 #include<Richedit.h>
 #include"resource.h"
 
@@ -6,8 +7,9 @@ CONST CHAR g_sz_WINDOW_CLASS[] = "My Text Editor";
 
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-BOOL LoadTextFileToEdit(HWND hEdit, LPSTR lpszFileName);
-BOOL SaveTextFileFromEdit(HWND hwnd, LPSTR lpszFileName);
+BOOL LoadTextFileToEdit(HWND hEdit, LPSTR lpszFileName, LPSTR lpszFileText);
+BOOL SaveTextFileFromEdit(HWND hEdit, LPSTR lpszFileName, LPSTR lpszText, LPSTR lpszFileText);
+BOOL FileWasChanged(HWND hEdit, LPSTR lpszText, LPSTR lpszFileText);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
@@ -31,7 +33,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wc.lpszMenuName = MAKEINTRESOURCE(IDR_MAIN_MENU);
 	wc.lpfnWndProc = WndProc;
 	
-	if (!RegisterClassEx(&wc))
+	if (!RegisterClassEx(&wc))  //Эта функция регистрирует класс окна
 	{
 		MessageBox(NULL, "Class registration failed", "Error", MB_OK | MB_ICONERROR);
 		return 0;
@@ -74,6 +76,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	static CHAR szFileName[MAX_PATH]{};
+	static LPSTR lpszText = NULL;
+	static LPSTR lpszFileText = NULL;
+
 	switch (uMsg)
 	{
 	case WM_CREATE:
@@ -85,10 +91,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		//Клиентская область - это рабочая область приложения
 		HWND hEdit = CreateWindowEx
 		(
-			NULL, RICHEDIT_CLASS, "Text Editor",
+			NULL, RICHEDIT_CLASS, "",
 			WS_CHILD | WS_VISIBLE | WS_BORDER | ES_MULTILINE,
-			rect.left, rect.top,
-			rect.right - rect.left, rect.bottom - rect.top,
+			0, 0,
+			rect.right, rect.bottom,
 		    hwnd,
 			(HMENU)IDC_EDIT,
 			GetModuleHandle(NULL),
@@ -102,7 +108,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 		case ID_FILE_OPEN:
 		{
-			CHAR szFileName[MAX_PATH]{};
+			//CHAR szFileName[MAX_PATH]{};
 			OPENFILENAME ofn;
 			ZeroMemory(&ofn, sizeof(ofn));
 
@@ -117,14 +123,23 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			if (GetOpenFileName(&ofn))
 			{
 				HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);
-				LoadTextFileToEdit(hEdit, szFileName);
+				LoadTextFileToEdit(hEdit, szFileName, lpszFileText);
 			}
 
 		}
 		break;
+		case ID_FILE_SAVE:
+		{
+			if (szFileName[0])
+			{
+				SaveTextFileFromEdit(GetDlgItem(hwnd, IDC_EDIT), szFileName, lpszText, lpszFileText);
+				break;
+			}
+		}
+			
 		case ID_FILE_SAVEAS:
 		{
-			CHAR szFileName[MAX_PATH] = {};
+			//CHAR szFileName[MAX_PATH] = {};
 
 			OPENFILENAME ofn;
 
@@ -132,7 +147,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			ofn.lStructSize = sizeof(ofn);
 			ofn.hwndOwner = hwnd;
-			ofn.lpstrFilter = "Text files (*.txt)\0 * .txt\0ALL files(*.*)\0 * .*\0";
+			ofn.lpstrFilter = "Text files (*.txt)\0 * .txt\0ALL files(*.*)\0 * .*\0";//Double NULL-Terminated line
 			ofn.lpstrFile = szFileName;
 			ofn.nMaxFile = MAX_PATH;
 			ofn.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
@@ -141,7 +156,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			if (GetSaveFileName(&ofn))
 			{
 				HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);
-				SaveTextFileFromEdit(hEdit, szFileName);
+				SaveTextFileFromEdit(hEdit, szFileName, lpszText, lpszFileText);
 			}
 		}
 		break;
@@ -149,13 +164,30 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 		break;
 	case WM_DESTROY: PostQuitMessage(0); break;
-	case WM_CLOSE:	 DestroyWindow(hwnd); break;
+	case WM_CLOSE:	 
+	{
+		if (FileWasChanged(GetDlgItem(hwnd, IDC_EDIT), lpszText, lpszFileText))
+		{
+			switch (MessageBox(hwnd, "Сохранить изменения в файле?", "Question", MB_YESNOCANCEL | MB_ICONQUESTION))
+			{
+			case IDYES: SendMessage(hwnd, WM_COMMAND, ID_FILE_SAVE, 0);
+			case IDNO: DestroyWindow(hwnd);
+			case IDCANCEL: break;
+			}
+			
+		}
+		else
+		{
+			DestroyWindow(hwnd);
+		}
+	}
+		break;
 	default:		 return DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}
 	return NULL;
 }
 
-BOOL LoadTextFileToEdit(HWND hEdit, LPSTR lpszFileName)
+BOOL LoadTextFileToEdit(HWND hEdit, LPSTR lpszFileName, LPSTR lpszFileText)
 {
 	BOOL bSuccess = FALSE;
 	HANDLE hFile = CreateFile(lpszFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
@@ -164,7 +196,7 @@ BOOL LoadTextFileToEdit(HWND hEdit, LPSTR lpszFileName)
 		DWORD dwFileSize = GetFileSize(hFile, NULL);
 		if (dwFileSize != UINT_MAX)
 		{
-			LPSTR lpszFileText = (LPSTR)GlobalAlloc(GPTR, dwFileSize + 1);
+			lpszFileText = (LPSTR)GlobalAlloc(GPTR, dwFileSize + 1);
 			if (lpszFileText)
 			{
 				DWORD dwRead;
@@ -182,7 +214,7 @@ BOOL LoadTextFileToEdit(HWND hEdit, LPSTR lpszFileName)
 	return bSuccess;
 }
 
-BOOL SaveTextFileFromEdit(HWND hEdit, LPSTR lpszFileName)
+BOOL SaveTextFileFromEdit(HWND hEdit, LPSTR lpszFileName, LPSTR lpszText, LPSTR lpszFileText)
 {
 	BOOL bSuccess = FALSE;
 	HANDLE hFile = CreateFile(lpszFileName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -191,9 +223,10 @@ BOOL SaveTextFileFromEdit(HWND hEdit, LPSTR lpszFileName)
 		DWORD dwTextLength = GetWindowTextLength(hEdit);
 		if (dwTextLength > 0)
 		{
-			LPSTR lpszText = (LPSTR)GlobalAlloc(GPTR, dwTextLength + 1);
+			lpszText = (LPSTR)GlobalAlloc(GPTR, dwTextLength + 1);
 			if (lpszText != NULL)
 			{
+				lpszFileText = (LPSTR)GlobalAlloc(GPTR, dwTextLength + 1);
 				if (GetWindowText(hEdit, lpszText, dwTextLength + 1))
 				{
 					DWORD dwWritten;
@@ -203,7 +236,28 @@ BOOL SaveTextFileFromEdit(HWND hEdit, LPSTR lpszFileName)
 			}
 		}
 		CloseHandle(hFile);
+		strcpy(lpszFileText, lpszText);
 	}
 	return bSuccess;
 }
+
+BOOL FileWasChanged(HWND hEdit, LPSTR lpszText, LPSTR lpszFileText)
+{
+	BOOL fileChanged = FALSE;
+	DWORD dwTextLength = GetWindowTextLength(hEdit);
+	if (dwTextLength == 0 && lpszText == NULL && lpszFileText == NULL)return FALSE;
+	if (dwTextLength > 0)
+	{
+		lpszText = (LPSTR)GlobalAlloc(GPTR, dwTextLength + 1);
+		if (lpszFileText == NULL)lpszFileText = (LPSTR)GlobalAlloc(GPTR, dwTextLength + 1);
+		SendMessage(hEdit, WM_GETTEXT, dwTextLength, (LPARAM)lpszText);
+		//if (lpszText && lpszFileText)
+		{
+			//if()
+			if(lpszFileText && strcmp(lpszText, lpszFileText))fileChanged = TRUE;
+		}
+	}
+	return fileChanged;
+}
+
 

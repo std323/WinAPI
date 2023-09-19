@@ -587,9 +587,11 @@ VOID SetSkin(HWND hwnd, CONST CHAR sz_skin[])
 	//if (strcmp(sz_skin, "square_blue") == 0)SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, (LONG_PTR)hBrushSquareBlue);
 	//if (strcmp(sz_skin, "round_blue") == 0)	SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, (LONG_PTR)hBrushRoundBlue);
 	
-	/*HDC hdc = GetDC(hwnd);
+	HDC hdc = GetDC(hwnd);
 	if (strcmp(sz_skin, "square_blue") == 0)SetDCBrushColor(hdc, RGB(1, 96, 160));
 	if (strcmp(sz_skin, "round_blue") == 0)SetDCBrushColor(hdc, RGB(41, 143, 209));
 	ReleaseDC(hwnd, hdc);
-	UpdateWindow(hwnd);*/
+	//UpdateWindow(hwnd);
 }
+
+
