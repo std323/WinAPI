@@ -64,11 +64,13 @@ BEGIN
     END
     POPUP "Edit"
     BEGIN
-        MENUITEM "Font",                        ID_EDIT_FONT
-        MENUITEM SEPARATOR
         MENUITEM "Copy ",                       ID_EDIT_COPY
         MENUITEM "Past",                        ID_EDIT_PAST
         MENUITEM "Find",                        ID_EDIT_FIND
+    END
+    POPUP "Format"
+    BEGIN
+        MENUITEM "Font",                        ID_FORMAT_FONT
     END
     POPUP "Help"
     BEGIN
