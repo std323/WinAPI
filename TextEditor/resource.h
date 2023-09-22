@@ -6,6 +6,9 @@
 
 #define IDC_EDIT                         100
 #define IDR_MAIN_MENU                    101
+
+#define IDC_STATUS                       102
+
 #define ID_FILE_NEW                     40001
 #define ID_FILE_OPEN                    40002
 #define ID_FILE_SAVE                    40003
